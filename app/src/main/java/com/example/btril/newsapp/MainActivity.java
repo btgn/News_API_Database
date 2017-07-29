@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         search = (EditText) findViewById(R.id.searchQuery);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHapticFeedbackEnabled(true);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         boolean first = sp.getBoolean("first", true);
 
@@ -124,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Void> loader, Void data) {
-        progress.setVisibility(View.GONE); // visibility of the ProgressBar to GONE when the TextView is displayed
+        progress.setVisibility(View.GONE); // visibility
         sdb = new DBHelper(MainActivity.this).getReadableDatabase();
         cursor = DatabaseUtils.getAll(sdb);
 
@@ -144,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         cursor.moveToPosition(itemIndex);
         String url = cursor.getString(cursor.getColumnIndex(Contract.TABLE_ARTICLES.COLUMN_NAME_URL));
         Log.d(TAG, String.format("Url %s", url));
-
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         startActivity(intent);
